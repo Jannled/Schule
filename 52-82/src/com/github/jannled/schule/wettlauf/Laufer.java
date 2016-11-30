@@ -3,7 +3,7 @@ package com.github.jannled.schule.wettlauf;
 public class Laufer 
 {
 	private String name;
-	float zeit;
+	double zeit;
 	boolean qualifiziert;
 	
 	public Laufer(String name)
@@ -19,12 +19,12 @@ public class Laufer
 		this.name = name;
 	}
 
-	public float getZeit() {
+	public double getZeit() {
 		return zeit;
 	}
 
-	public void setZeit(float zeit) {
-		this.zeit = zeit;
+	public void setZeit(double d) {
+		this.zeit = d;
 	}
 
 	public boolean isQualifiziert() {

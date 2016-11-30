@@ -7,21 +7,21 @@ public class SortMinMax
 	 * @param list The list to get the max and min value
 	 * @return An double array with the length of 2. It contains the min and the max value
 	 */
-	public static double[] minMax(double[] list)
+	public static Laufer[] minMax(Laufer[] list)
 	{
-		double min = 0;
-		double max = 0;
-		for(double d : list)
+		Laufer min = list[0];
+		Laufer max = list[0];
+		for(Laufer l : list)
 		{
-			if(d<min)
+			if(l.getZeit()<min.getZeit())
 			{
-				min = d;
+				min = l;
 			}
-			if(d>max)
+			if(l.getZeit()>max.getZeit())
 			{
-				max = d;
+				max = l;
 			}
 		}
-		return new double[] {min, max};
+		return new Laufer[] {min, max};
 	}
 }
