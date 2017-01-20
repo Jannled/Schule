@@ -1,4 +1,4 @@
-package com.github.jannled.wetterstation;
+package com.github.jannled.schule.wetterstation;
 
 import java.util.Date;
 

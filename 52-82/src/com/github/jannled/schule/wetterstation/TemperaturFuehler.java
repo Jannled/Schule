@@ -1,8 +1,8 @@
-package com.github.jannled.wetterstation;
+package com.github.jannled.schule.wetterstation;
 
 import java.util.Date;
 
-public class TemperaturFühler 
+public class TemperaturFuehler 
 {
 	public Wetterdaten messen()
 	{
