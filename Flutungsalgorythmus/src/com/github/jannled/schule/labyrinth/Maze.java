@@ -105,8 +105,8 @@ public class Maze extends JPanel
 		}
 	}
 	
-	public int[][] getMaze()
+	public int get(int x, int y)
 	{
-		return maze;
+		return maze[x][y];
 	}
 }

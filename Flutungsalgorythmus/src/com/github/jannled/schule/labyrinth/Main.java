@@ -19,6 +19,10 @@ public class Main
 		frame.add(maze);
 		frame.pack();
 		frame.setVisible(true);
+		
+		Mazerunner mazerunner = new RightHand(maze, 1, 1);
+		boolean maze = mazerunner.start();
+		System.out.println("Der Runner ist " + (maze ? " entkommen!" : " nicht entkommen!"));
 	}
 	
 	public static void main(String[] args) 
