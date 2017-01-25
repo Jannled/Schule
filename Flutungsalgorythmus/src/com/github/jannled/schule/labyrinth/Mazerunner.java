@@ -8,6 +8,7 @@ public abstract class Mazerunner
 	public static final int WEST = 3;
 	
 	Maze maze;
+	int orientation;
 	int xpos;
 	int ypos;
 	
@@ -16,6 +17,7 @@ public abstract class Mazerunner
 		this.maze = maze;
 		this.xpos = xpos;
 		this.ypos = ypos;
+		this.orientation = NORTH;
 	}
 	
 	/**
@@ -35,5 +37,35 @@ public abstract class Mazerunner
 	public int[] getPos()
 	{
 		return new int[] {xpos, ypos};
+	}
+	
+	
+	public void drehe()
+	{
+		orientation++;
+		while(orientation>3)
+		{
+			orientation = orientation - 4;
+		}
+	}
+	
+	public void gehe()
+	{
+		if(orientation == NORTH)
+		{
+			ypos = ypos+1;
+		}
+		else if(orientation == EAST)
+		{
+			xpos = xpos+1;
+		}
+		else if(orientation == SOUTH)
+		{
+			ypos = ypos-1;
+		}
+		else if(orientation == WEST)
+		{
+			xpos = xpos-1;
+		}
 	}
 }

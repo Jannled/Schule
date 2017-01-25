@@ -9,8 +9,6 @@ public class RightHand extends Mazerunner
 
 	private boolean exit;
 	
-	int orientation = NORTH;
-	
 	public boolean start() 
 	{
 		orientation = NORTH;
@@ -27,9 +25,9 @@ public class RightHand extends Mazerunner
 			
 			try 
 			{
-				area[NORTH] = maze.get(xpos, ypos+1);
+				area[NORTH] = maze.get(xpos, ypos-1);
 				area[EAST] = maze.get(xpos+1, ypos);
-				area[SOUTH] = maze.get(xpos, ypos-1);
+				area[SOUTH] = maze.get(xpos, ypos+1);
 				area[WEST] = maze.get(xpos-1, ypos);
 			} catch (ArrayIndexOutOfBoundsException e) 
 			{
