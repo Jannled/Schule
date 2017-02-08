@@ -31,14 +31,13 @@ public abstract class Mazerunner
 	
 	public void redraw()
 	{
-		maze.drawMarker(xpos, ypos);
+		maze.repaint();
 	}
 	
 	public int[] getPos()
 	{
 		return new int[] {xpos, ypos};
 	}
-	
 	
 	public void drehe()
 	{

@@ -16,6 +16,8 @@ public class Maze extends JPanel
 	private int boxWidth = 20;
 	private int boxHeight = 20;
 	
+	public static boolean debug = true;
+	
 	public Maze(int width, int height)
 	{
 		maze = new int[width][height];
@@ -48,6 +50,7 @@ public class Maze extends JPanel
 	
 	public void drawMarker(int x, int y)
 	{
+		System.out.println("Hallo!");
 		Graphics g = getGraphics();
 		g.setColor(Color.BLUE);
 		Rectangle r = calcBox(x, y);
@@ -64,8 +67,8 @@ public class Maze extends JPanel
 	{
 		int xpos = x*boxWidth;
 		int ypos =  y*boxHeight;
-		int width = x*boxWidth+boxWidth;
-		int height = y*boxHeight+boxHeight;
+		int width = boxWidth;
+		int height = boxHeight;
 		return new Rectangle(xpos, ypos, width, height);
 	}
 	
@@ -75,7 +78,7 @@ public class Maze extends JPanel
 	 * @param x Xpos of the box in the array
 	 * @param y Ypos of the box in the array
 	 */
-	public void draw(Graphics g, int x, int y, Color c)
+	public void drawCube(Graphics g, int x, int y, Color c)
 	{
 		if(maze == null)
 			return;	
@@ -84,11 +87,17 @@ public class Maze extends JPanel
 		
 		Rectangle r = calcBox(x, y);
 		g.fillRect(r.x, r.y, r.width, r.height);
+		if(debug)
+		{
+			g.setColor(Color.ORANGE);
+			g.drawString("" + x + "|" + y, r.x+10, r.y+10);
+		}
 	}
 	
 	@Override
 	public void paint(Graphics g) 
 	{
+		g.clearRect(0, 0, getWidth(), getHeight());
 		super.paint(g);
 		boxWidth = getWidth() / maze.length;
 		boxHeight = getHeight() / maze[0].length;
@@ -100,13 +109,26 @@ public class Maze extends JPanel
 		{
 			for(int y=0; y<maze[0].length; y++)
 			{
-				draw(g, x, y, colors[maze[y][x] * -1]);
+				if(get(x, y)<0)
+				{
+					drawCube(g, x, y, Color.BLUE);
+				}
+				else
+				{
+					int feld = get(x, y);
+					drawCube(g, x, y, colors[get(x, y) * (-1)]);
+				}
 			}
 		}
 	}
 	
 	public int get(int x, int y)
 	{
-		return maze[x][y];
+		return maze[y][x];
+	}
+	
+	public void set(int x, int y, int value)
+	{
+		maze[y][x] = value;
 	}
 }

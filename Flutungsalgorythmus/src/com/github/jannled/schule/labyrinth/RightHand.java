@@ -2,9 +2,19 @@ package com.github.jannled.schule.labyrinth;
 
 public class RightHand extends Mazerunner
 {
+	int value = 0;
+	
 	public RightHand(Maze maze, int xpos, int ypos) 
 	{
 		super(maze, xpos, ypos);
+	}
+	
+	@Override
+	public void redraw()
+	{
+		value++;
+		maze.set(xpos, ypos, value);
+		maze.repaint();
 	}
 
 	private boolean exit;
@@ -35,7 +45,7 @@ public class RightHand extends Mazerunner
 				continue;
 			}
 			int breaker = 0;
-			while(area[orientation] != -1)
+			while(area[orientation] == -1)
 			{
 				drehe();
 				breaker = breaker + 1;
@@ -63,7 +73,7 @@ public class RightHand extends Mazerunner
 	{
 		if(orientation == NORTH)
 		{
-			ypos = ypos+1;
+			ypos = ypos-1;
 		}
 		else if(orientation == EAST)
 		{
@@ -71,7 +81,7 @@ public class RightHand extends Mazerunner
 		}
 		else if(orientation == SOUTH)
 		{
-			ypos = ypos-1;
+			ypos = ypos+1;
 		}
 		else if(orientation == WEST)
 		{

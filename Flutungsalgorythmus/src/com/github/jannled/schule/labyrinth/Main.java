@@ -12,7 +12,7 @@ public class Main
 	
 	public Main()
 	{
-		JFrame frame = new JFrame("Maze Flutungsalgorythmus");
+		JFrame frame = new JFrame("Maze Escape");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		maze = new Maze(new File("src/com/github/jannled/schule/labyrinth/mazes/Maze01.txt"));
 		maze.setPreferredSize(new Dimension(800, 800));
