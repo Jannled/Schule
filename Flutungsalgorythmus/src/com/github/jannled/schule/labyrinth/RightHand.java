@@ -44,30 +44,20 @@ public class RightHand extends Mazerunner
 				System.err.println("Habe die Border berührt");
 				continue;
 			}
-			int breaker = 0;
-			while(area[orientation] == -1)
+			
+			//Berechne die Blickrichtung für das rechte Feld
+			int rechts = orientation+1;
+			if(rechts > 3)
+				rechts = 0;
+			
+			while(area[rechts] == -1)
 			{
-				drehe();
-				breaker = breaker + 1;
-				if(breaker>4)
-				{
-					return false;
-				}
+				rechts++;
 			}
 			gehe();
 			redraw();
-			maze.drawMarker(xpos, ypos);
 		}
 		return false;
-	}
-	
-	public void drehe()
-	{
-		orientation++;
-		while(orientation>3)
-		{
-			orientation = orientation - 4;
-		}
 	}
 	
 	public void gehe()

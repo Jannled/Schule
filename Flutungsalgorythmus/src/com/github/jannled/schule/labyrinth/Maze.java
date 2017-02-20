@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class Maze extends JPanel
 {
-	Graphics lCanvas = null;
+	Graphics lCanvas = getGraphics();
 	private static final long serialVersionUID = -2835529883015833541L;
 	private int[][] maze;
 	

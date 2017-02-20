@@ -39,7 +39,16 @@ public abstract class Mazerunner
 		return new int[] {xpos, ypos};
 	}
 	
-	public void drehe()
+	public void dreheLinks()
+	{
+		orientation--;
+		while(orientation<0)
+		{
+			orientation = orientation + 4;
+		}
+	}
+	
+	public void dreheRechts()
 	{
 		orientation++;
 		while(orientation>3)
