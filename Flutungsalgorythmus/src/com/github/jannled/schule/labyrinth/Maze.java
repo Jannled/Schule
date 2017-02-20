@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 public class Maze extends JPanel
 {
+	Graphics lCanvas = null;
 	private static final long serialVersionUID = -2835529883015833541L;
 	private int[][] maze;
 	
@@ -50,11 +51,11 @@ public class Maze extends JPanel
 	
 	public void drawMarker(int x, int y)
 	{
-		System.out.println("Hallo!");
-		Graphics g = getGraphics();
-		g.setColor(Color.BLUE);
+		if(lCanvas == null)
+			return;
+		lCanvas.setColor(Color.BLUE);
 		Rectangle r = calcBox(x, y);
-		g.drawOval(r.x, r.y, r.width, r.height);
+		lCanvas.drawOval(r.x, r.y, r.width, r.height);
 	}
 	
 	/**
@@ -97,6 +98,7 @@ public class Maze extends JPanel
 	@Override
 	public void paint(Graphics g) 
 	{
+		lCanvas = g;
 		g.clearRect(0, 0, getWidth(), getHeight());
 		super.paint(g);
 		boxWidth = getWidth() / maze.length;
@@ -109,14 +111,15 @@ public class Maze extends JPanel
 		{
 			for(int y=0; y<maze[0].length; y++)
 			{
-				if(get(x, y)<0)
+				int feld = get(x, y);
+				if(feld>0)
 				{
 					drawCube(g, x, y, Color.BLUE);
 				}
 				else
 				{
-					int feld = get(x, y);
-					drawCube(g, x, y, colors[get(x, y) * (-1)]);
+					int value = feld * (-1);
+					drawCube(g, x, y, colors[value]);
 				}
 			}
 		}

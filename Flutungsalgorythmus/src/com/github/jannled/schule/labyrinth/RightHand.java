@@ -56,6 +56,7 @@ public class RightHand extends Mazerunner
 			}
 			gehe();
 			redraw();
+			maze.drawMarker(xpos, ypos);
 		}
 		return false;
 	}
