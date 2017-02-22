@@ -1,9 +1,7 @@
 package com.github.jannled.schule.labyrinth;
 
 public class RightHand extends Mazerunner
-{
-	int value = 0;
-	
+{	
 	public RightHand(Maze maze, int xpos, int ypos) 
 	{
 		super(maze, xpos, ypos);
@@ -13,36 +11,30 @@ public class RightHand extends Mazerunner
 	public void redraw()
 	{
 		value++;
+		if(maze.get(xpos, ypos) == -2)
+		{
+			return;
+		}
 		maze.set(xpos, ypos, value);
 		maze.repaint();
 	}
 
 	private boolean exit;
 	
+	@Override
 	public boolean start() 
 	{
 		orientation = NORTH;
 		
 		while(!exit)
 		{
-			int area[] = new int[4];
+			int area[] = area();
 			
 			//Check if it has reached the exit
 			if(maze.get(xpos, ypos) == -2)
 			{
+				backtrace(xpos, ypos);
 				return true;
-			}
-			
-			try 
-			{
-				area[NORTH] = maze.get(xpos, ypos-1);
-				area[EAST] = maze.get(xpos+1, ypos);
-				area[SOUTH] = maze.get(xpos, ypos+1);
-				area[WEST] = maze.get(xpos-1, ypos);
-			} catch (ArrayIndexOutOfBoundsException e) 
-			{
-				System.err.println("Habe die Border berührt");
-				continue;
 			}
 			
 			//Berechne die Blickrichtung für das rechte Feld
@@ -52,10 +44,14 @@ public class RightHand extends Mazerunner
 			
 			while(area[rechts] == -1)
 			{
-				rechts++;
+				rechts--;
+				if(rechts<0)
+					rechts=3;
 			}
+			orientation = rechts;
 			gehe();
 			redraw();
+			pause();
 		}
 		return false;
 	}
