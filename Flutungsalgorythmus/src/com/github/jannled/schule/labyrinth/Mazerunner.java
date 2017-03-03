@@ -66,7 +66,7 @@ public abstract class Mazerunner
 	{
 		if(orientation == NORTH)
 		{
-			ypos = ypos+1;
+			ypos--;
 		}
 		else if(orientation == EAST)
 		{
@@ -74,7 +74,7 @@ public abstract class Mazerunner
 		}
 		else if(orientation == SOUTH)
 		{
-			ypos = ypos-1;
+			ypos++;
 		}
 		else if(orientation == WEST)
 		{
@@ -100,6 +100,10 @@ public abstract class Mazerunner
 	public int[] area(int xpos, int ypos)
 	{
 		int[] area = new int[4];
+		area[NORTH] = 0x011111111;
+		area[EAST] = 0x011111111;
+		area[SOUTH] = 0x011111111;
+		area[WEST] = 0x011111111;
 		try 
 		{
 			area[NORTH] = maze.get(xpos, ypos-1);
@@ -123,16 +127,19 @@ public abstract class Mazerunner
 	{
 		int xtrace = xpos;
 		int ytrace = ypos;
+		int min = 0x011111111;
 		
-		while(xtrace!=start[0] && ytrace!=start[2])
+		while(xtrace!=start[0] || ytrace!=start[1])
 		{
+			//Mark current Pos on field
+			maze.setMarker(xtrace, ytrace, 2);
+			
 			int[] area = area(xtrace, ytrace);
-			int min = 0;
 			int iorientation = 0;
 			
 			for(int i=0; i<4; i++)
 			{
-				//Checken ob das Feld eine Wand und sonst zum niedrigsten Feld gehen
+				//Checken ob das Feld eine Wand ist und sonst zum niedrigsten Feld gehen
 				if(area[i] > 0 && area[i] < min)
 				{
 					min = area[i];
@@ -142,7 +149,7 @@ public abstract class Mazerunner
 			//Bewege zum kleinsten Feld
 			if(iorientation == NORTH)
 			{
-				ytrace++;
+				ytrace--;
 			}
 			else if(iorientation == EAST)
 			{
@@ -150,7 +157,7 @@ public abstract class Mazerunner
 			}
 			else if(iorientation == SOUTH)
 			{
-				ytrace--;
+				ytrace++;
 			}
 			else if(iorientation == WEST)
 			{
@@ -158,6 +165,7 @@ public abstract class Mazerunner
 			}
 		}
 		System.out.println("Schnellste Route gefunden");
+		maze.repaint();
 	}
 	
 	/**

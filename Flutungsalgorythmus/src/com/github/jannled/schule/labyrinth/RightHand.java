@@ -25,6 +25,7 @@ public class RightHand extends Mazerunner
 	public boolean start() 
 	{
 		orientation = NORTH;
+		redraw();
 		
 		while(!exit)
 		{

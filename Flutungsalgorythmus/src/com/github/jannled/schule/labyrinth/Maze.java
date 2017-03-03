@@ -9,30 +9,31 @@ import javax.swing.JPanel;
 
 public class Maze extends JPanel
 {
-	Graphics lCanvas = getGraphics();
 	private static final long serialVersionUID = -2835529883015833541L;
 	private int[][] maze;
+	private int[][] markers;
 	
 	private Color[] colors = {Color.WHITE, Color.BLACK, Color.GREEN};
 	private int boxWidth = 20;
 	private int boxHeight = 20;
 	
-	public static boolean debug = true;
-	
 	public Maze(int width, int height)
 	{
 		maze = new int[width][height];
+		markers = new int[width][height];
 	}
 	
 	public Maze(int[][] maze)
 	{
 		this.maze = maze;
+		this.markers = new int[maze.length][maze[0].length];
 	}
 	
 	public Maze(File path)
 	{
 		String[] text = TextfileReader.readTextFile(path);
-		maze = new int[text.length][text[0].toCharArray().length];
+		maze = new int[text[0].toCharArray().length][text.length];
+		markers = new int[maze.length][maze[0].length];
 		
 		for(int x=0; x<maze.length; x++)
 		{
@@ -49,13 +50,15 @@ public class Maze extends JPanel
 		
 	}
 	
-	public void drawMarker(int x, int y)
+	public void drawMarker(Graphics g, int x, int y)
 	{
-		if(lCanvas == null)
-			return;
-		lCanvas.setColor(Color.BLUE);
-		Rectangle r = calcBox(x, y);
-		lCanvas.drawOval(r.x, r.y, r.width, r.height);
+		if(getMarker(x, y) == 2)
+		{
+			Rectangle size = calcBox(x, y);
+			
+			g.setColor(colors[getMarker(x, y)]);
+			g.drawOval(size.x, size.y, size.width, size.height);
+		}
 	}
 	
 	/**
@@ -88,7 +91,7 @@ public class Maze extends JPanel
 		
 		Rectangle r = calcBox(x, y);
 		g.fillRect(r.x, r.y, r.width, r.height);
-		if(debug)
+		if(Main.debug)
 		{
 			g.setColor(Color.ORANGE);
 			g.drawString("" + x + "|" + y, r.x+10, r.y+10);
@@ -98,7 +101,6 @@ public class Maze extends JPanel
 	@Override
 	public void paint(Graphics g) 
 	{
-		lCanvas = g;
 		g.clearRect(0, 0, getWidth(), getHeight());
 		super.paint(g);
 		boxWidth = getWidth() / maze.length;
@@ -121,6 +123,7 @@ public class Maze extends JPanel
 					int value = feld * (-1);
 					drawCube(g, x, y, colors[value]);
 				}
+				drawMarker(g, x, y);
 			}
 		}
 	}
@@ -130,8 +133,18 @@ public class Maze extends JPanel
 		return maze[y][x];
 	}
 	
+	public int getMarker(int x, int y)
+	{
+		return markers[y][x];
+	}
+	
 	public void set(int x, int y, int value)
 	{
 		maze[y][x] = value;
+	}
+	
+	public void setMarker(int x, int y, int value)
+	{
+		markers[y][x] = value;
 	}
 }
