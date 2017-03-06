@@ -4,14 +4,46 @@ import javax.swing.JFrame;
 
 public class Main 
 {
-	JFrame frame = new JFrame("Lebensform b42");
-	Matrix matrix;
+	JFrame frame;
+	Canvas canvas;
+	Zellhaufen matrix;
+	public static boolean simRunning = true;
 	
 	public Main()
 	{
-		matrix = new Matrix(10, 10);
-		frame.add(matrix);
+		frame = new JFrame("Lebensform b42");
+		matrix = new Zellhaufen(100, 100, 0.2F);
+		matrix.getZelle(99, 100);
+		canvas = new Canvas(matrix);
+		frame.add(canvas);
+		frame.setBounds(10, 10, 1000, 1000);
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		loop();
+	}
+	
+	public void loop()
+	{
+		Thread thread = new Thread(new Runnable() 
+		{	
+			@Override
+			public void run() 
+			{
+				while(Main.simRunning)
+				{
+					getZellhaufen().update();
+					getCanvas().repaint();
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) 
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		thread.start();
 	}
 	
 	public static void main(String[] args) 
@@ -19,4 +51,13 @@ public class Main
 		new Main();
 	}
 
+	public Zellhaufen getZellhaufen()
+	{
+		return matrix;
+	}
+	
+	public Canvas getCanvas()
+	{
+		return canvas;
+	}
 }
