@@ -1,5 +1,7 @@
 package com.github.jannled.b42;
 
+import java.util.Arrays;
+
 import javax.swing.JFrame;
 
 public class Main 
@@ -12,8 +14,8 @@ public class Main
 	public Main()
 	{
 		frame = new JFrame("Lebensform b42");
-		matrix = new Zellhaufen(100, 100, 0.2F);
-		matrix.getZelle(99, 100);
+		matrix = new Zellhaufen(100, 100, 0.1F);
+		matrix.getZelle(-123, 100);
 		canvas = new Canvas(matrix);
 		frame.add(canvas);
 		frame.setBounds(10, 10, 1000, 1000);
@@ -48,6 +50,7 @@ public class Main
 	
 	public static void main(String[] args) 
 	{
+		System.out.println(Arrays.toString(args));
 		new Main();
 	}
 

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 public class Zellhaufen 
 {
 	private Zelle[][] matrix;
+	private Zelle[][] buffer;
 	Dimension size;
 	
 	/**
@@ -25,6 +26,7 @@ public class Zellhaufen
 			}
 		}
 		size = new Dimension(matrix[0].length, matrix.length);
+		this.buffer = matrix;
 	}
 	
 	public Dimension getSize()
@@ -36,18 +38,44 @@ public class Zellhaufen
 	{
 		int xpos = x%matrix[0].length;
 		int ypos = y%matrix.length;
+		
+		if(xpos < 0)
+		{
+			xpos = matrix[0].length + xpos;
+		}
+		if(ypos < 0)
+		{
+			ypos = matrix.length + ypos;
+		}
 		return matrix[ypos][xpos];
 	}
 	
 	public void setZelle(int x, int y, Zelle zelle)
 	{
-		int xpos = x%matrix[0].length;
-		int ypos = y%matrix.length;
+		int xpos = x%buffer[0].length;
+		int ypos = y%buffer.length;
+		
+		if(xpos < 0)
+		{
+			xpos = buffer[0].length + xpos;
+		}
+		if(ypos < 0)
+		{
+			ypos = buffer.length + ypos;
+		}
+		
 		matrix[ypos][xpos] = zelle;
 	}
 	
-	public void update()
+	public void swapBuffer()
 	{
+		matrix = buffer;
+		buffer = new Zelle[(int) size.getHeight()][(int) size.getWidth()];
+		System.arraycopy(matrix, 0, buffer, 0, matrix.length);
+	}
+	
+	public void update()
+	{	
 		//Jede Zelle durchgehen
 		for(int x=0; x<size.getWidth(); x++)
 		{
@@ -70,6 +98,8 @@ public class Zellhaufen
 				}
 			}
 		}
+		
+		swapBuffer();
 	}
 	
 	public int getNeighbours(int x, int y)
