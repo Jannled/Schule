@@ -16,7 +16,7 @@ public class Turm extends JPanel
 	
 	public Turm()
 	{
-		setLayout(new GridLayout(0, 1));
+		setLayout(new GridLayout(1, 0));
 	}
 	
 	public void repaint()
@@ -40,7 +40,7 @@ public class Turm extends JPanel
 	}
 	
 	@Override
-	public void paint(Graphics g) 
+	public void paint(Graphics g)
 	{
 		g.setColor(Color.CYAN);
 		g.drawRect(0, 0, 20, 20);
