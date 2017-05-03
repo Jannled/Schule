@@ -1,9 +1,7 @@
 package com.github.jannled.hanoi;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridLayout;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -16,34 +14,38 @@ public class Turm extends JPanel
 	
 	public Turm()
 	{
-		setLayout(new GridLayout(1, 0));
+		
 	}
 	
 	public void repaint()
 	{
-		System.out.println("repainting");
-		try {
-			for(Klotz k : turm)
-			{
-				k.repaint();
-			}
-		} catch(NullPointerException e)
-		{
-			System.err.println("Stack is empty");
-		}
 		
 	}
 	
 	public void add(Klotz k)
 	{
-		turm.add(k);
+		turm.add(0, k);
+	}
+	
+	public Klotz takeKlotz()
+	{
+		return turm.pop();
 	}
 	
 	@Override
 	public void paint(Graphics g)
 	{
-		g.setColor(Color.CYAN);
-		g.drawRect(0, 0, 20, 20);
 		super.paint(g);
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, 300, 500);
+		
+		g.setColor(Color.BLUE);
+		
+		int stack = 0;
+		for(Klotz k : turm)
+		{
+			k.drawSelf(g, stack);
+			stack++;
+		}
 	}
 }

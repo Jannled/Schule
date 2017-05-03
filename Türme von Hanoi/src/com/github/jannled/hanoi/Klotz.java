@@ -1,26 +1,31 @@
 package com.github.jannled.hanoi;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.JPanel;
-
-public class Klotz extends JPanel
-{
-	private static final long serialVersionUID = 4224548994801960173L;
-	
+public class Klotz
+{	
 	private int number;
 
+	/**
+	 * 
+	 * @param number Die kleinste Zahl ist der größte Klotz
+	 */
 	public Klotz(int number)
 	{
 		this.number = number;
 	}
 	
-	@Override
-	public void paint(Graphics g) 
+	public int getNumber()
 	{
-		super.paint(g);
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 30*number, 10*number);
+		return number;
+	}
+	
+	public void drawSelf(Graphics g, int stack)
+	{
+		int x = 0;
+		int y = 20*stack;
+		int width = 100/getNumber();
+		int height = 20;
+		g.fillRect(x, y, width, height);
 	}
 }
