@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<head>
+	<html lang="de-DE">
+	<meta charset="UTF-8">
+	<meta name="author" content="Jannled">
+	<meta name="description" content="Der Convos Vertretungsplan Online">
+	<meta name="keywords" content="Convos, Conrad von Soest, Vertretungsplan">
+	<title>Vertretungsplan</title>
+	
+	<style>
+		.Navbar {
+			background-color: #eeeeee;
+			margin: 0;
+			padding: 0;
+			
+			width: 14em;
+			height: 100%;
+			position: fixed;
+		}
+		
+		.mNavbar {
+			background-color: #eeeeee;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.Page {
+			margin-left: 14em;
+		}
+		
+		.mPage {
+			
+		}
+		
+		.vplan {
+			border: none;	
+			height: 33em;
+			width: 100%;
+		}
+		
+		.btn {
+			padding: 0.5em;
+			display: block;
+			background-color: #eeeeee;
+			
+			border-bottom: thin solid #d5d5d5;
+			
+			color: black;
+			font-weight: bold;
+			text-decoration: none;
+		}
+		
+		.btn:hover {
+			background-color: #e0e0e0;
+		}
+		
+		.head {
+			background-color: #212121;
+			color: white;
+			padding: 10px;
+		}
+	</style>
+</head>
+
+<body onload=siteStructure()>
+
+	<div class="head">
+		<h1>Convos Vertretungsplan Online</h1>
+	</div>
+	
+	<div class="Navbar">
+		<a class="btn" href="http://www.conrad-von-soest-gymnasium.de/fileadmin/vertretungsplan/heute/subst_001.html" 
+				target="vplan">Vertretungsplan Heute</a>
+		<a class="btn" href="http://www.conrad-von-soest-gymnasium.de/fileadmin/vertretungsplan/morgen/subst_001.html" 
+				target="vplan">Vertretungsplan Morgen</a>
+		<a class="btn" href="http://www.conrad-von-soest-gymnasium.de">Logout</a>
+	</div>
+	
+	<div class="Page">
+		<div>
+			<iframe class="vplan" name="vplan" sandbox>Vertretungsplan konnte nicht angezeigt werden, da Iframes nicht unterstützt werden!</iframe>
+		</div>
+		
+		<hr>
+		<div>
+			<ul>
+				<li style="color: #aa0000">Aufgrund einer Sicherheitslücke ist das Anmelden im Browser momentan deaktiviert, um private Daten zu schützen!</li>
+				<li>Alle angezeigten Daten sind nur für den privaten Zweck bestimmt und dürfen nicht an dritte weiter gegeben werden</li>
+				<li>Die Daten sind vertraulich zu behandeln</li>
+				<li>Alleiniger Besitzer der Daten ist das Conrad-von-Soest Gymnasium</li>
+				<li>Aus Sicherheitsgründen wir die IP-Adresse zusammen mit den Anmeldedaten gespeichert</li>
+			</ul>
+		</div>
+	</div>
+	
+	<script>
+		function siteStructure()
+		{
+			if(window.innerWidth > window.innerHeight)
+				desktop();
+			else
+				mobile();
+		}
+		
+		function mobile()
+		{
+			var navbars = document.getElementsByClassName("Navbar");
+			var pages = document.getElementsByClassName("Page");
+			
+			for(i=0; i<navbars.length; i++)
+			{
+				navbars[i].className = "mNavbar";
+			}
+			for(i=0; i<pages.length; i++)
+			{
+				pages[i].className= "mPage";
+			}
+		}
+		
+		function desktop()
+		{
+			var navbars = document.getElementsByClassName("Navbar");
+			var pages = document.getElementsByClassName("Page");
+			
+			for(i=0; i<navbars.length; i++)
+			{
+				navbars[i].className = "Navbar";
+			}
+			for(i=0; i<pages.length; i++)
+			{
+				pages[i].className= "Page";
+			}
+		}
+	</script>
+</body>
