@@ -109,6 +109,7 @@ public class Main
 			System.out.println(" ------Konto Menü------");
 			System.out.println("1 Einzahlung");
 			System.out.println("2 Abbuchung");
+			System.out.println("3 Letzte Kontobewegung ansehen");
 			System.out.println("  Sonstige Eingaben beenden das Konto Menü");
 			
 			switch (scanner.next()) {
@@ -122,6 +123,10 @@ public class Main
 			case "2":
 				System.out.print("Geben sie den Betrag an, den sie abheben möchten: ");
 				k.getKonto(wahlKonto).abheben(readInt());
+				break;
+				
+			case "3":
+				Bankangestellter.letzteTransaktionen(k.getKonto(wahlKonto));
 				break;
 
 			//Konto Menü beenden
