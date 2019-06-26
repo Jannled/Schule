@@ -97,9 +97,9 @@ public class Main
 		System.out.printf("  ------%s------%n", k.getName());
 		k.kontenAnzeigen();
 		int wahlKonto = readInt();
-		while(wahlKonto < 0 || wahlKonto > k.anzKonten())
+		while(wahlKonto < 0 || wahlKonto > k.anzKonten()-1)
 		{
-			System.out.println("Ungültige Eingabe, bitte wähle eine Zahl von 0-" + k.anzKonten());
+			System.out.println("Ungültige Eingabe, bitte wähle eine Zahl von 0-" + (k.anzKonten()-1));
 			wahlKonto = readInt();
 		}
 		
