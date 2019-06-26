@@ -11,34 +11,11 @@ public class Konto
 	
 	private List<Transaktion> transaktionen = new ArrayList<Transaktion>();
 	
-	private static int kontoNummern = 70529000;
-	
-	public Konto(Kunde kunde)
-	{
-		this.besitzer = kunde;
-		this.kontoStand = 0;
-		this.kontoNummer = ++kontoNummern;
-	}
-	
 	public Konto(Kunde kunde, int kontoNummer)
 	{
 		this.besitzer = kunde;
 		this.kontoNummer = kontoNummer;
 		this.kontoStand = 0;
-	}
-	
-	public Konto(Kunde kunde, float startkapital)
-	{
-		this.besitzer = kunde;
-		this.kontoStand = startkapital;
-		this.kontoNummer = ++kontoNummern;
-	}
-	
-	public Konto(Kunde kunde, float startkapital, int kontoNummer)
-	{
-		this.besitzer = kunde;
-		this.kontoNummer = kontoNummer;
-		this.kontoStand = startkapital;
 	}
 
 	public void einzahlen(float betrag)

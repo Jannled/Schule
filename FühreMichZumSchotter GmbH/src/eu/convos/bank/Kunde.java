@@ -34,27 +34,6 @@ public class Kunde
 			System.err.printf("Der Kunde %s wurde mit %d Konten erstellt, nur die ersten vier wurden genommen!\n", getName(), konten.length);
 	}
 	
-	public Konto kontoAnlegen()
-	{
-		return kontoAnlegen(0);
-	}
-	
-	public Konto kontoAnlegen(float startkapital)
-	{
-		for(int i=0; i<konten.length; i++)
-		{
-			if(konten[i] != null) continue;
-			
-			Konto k = new Konto(this, startkapital);
-			konten[i] = k;
-			System.out.printf("Erstelle neues %s\n", k.toString());
-			return k;
-		}
-		
-		System.err.printf("Konnte kein Konto erstellen, die Maximale Anzahl von %d Konten wurde für %s erreicht\n", maxKonten, getName());
-		return null;
-	}
-	
 	public Konto kontoAnlegen(int kontoNummer)
 	{
 		for(int i=0; i<konten.length; i++)
