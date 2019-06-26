@@ -55,7 +55,7 @@ public class Kunde
 		return null;
 	}
 	
-	public Konto kontAnlegen(int kontoNummer)
+	public Konto kontoAnlegen(int kontoNummer)
 	{
 		for(int i=0; i<konten.length; i++)
 		{

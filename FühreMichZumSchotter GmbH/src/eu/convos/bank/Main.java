@@ -94,12 +94,13 @@ public class Main
 	
 	public void kontoMenue(Kunde k)
 	{
-		System.out.printf("%" + (Kunde.maxKonten/10 + 1) + "d------%s------%n", k.getName());
+		System.out.printf("  ------%s------%n", k.getName());
 		k.kontenAnzeigen();
 		int wahlKonto = readInt();
 		while(wahlKonto < 0 || wahlKonto > k.anzKonten())
 		{
-			System.out.println("Ungültige Eingabe");
+			System.out.println("Ungültige Eingabe, bitte wähle eine Zahl von 0-" + k.anzKonten());
+			wahlKonto = readInt();
 		}
 		
 		boolean kontoSchleife = true;
