@@ -9,6 +9,9 @@ public class Szene
 	
 	public Szene(Polygon[] polygone, int viewX, int viewY)
 	{
+		xmin = xmax = viewX;
+		ymin = ymax = viewY;
+		
 		for(Polygon p : polygone)
 		{
 			for(int x=0; x<p.anzahlKoordinaten(); x+= Polygon.DIMENSION)

@@ -31,13 +31,20 @@ public class OutputPane extends Canvas
 			for(int i=0; i<p.anzahlKoordinaten(); i += 2)
 			{
 				g.drawLine(
-					map(p.getKoordinate((i)   % p.anzahlKoordinaten()),   szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
+					map(p.getKoordinate((i)   % p.anzahlKoordinaten()), szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
 					map(p.getKoordinate((i+1) % p.anzahlKoordinaten()), szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()),
 					map(p.getKoordinate((i+2) % p.anzahlKoordinaten()), szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
 					map(p.getKoordinate((i+3) % p.anzahlKoordinaten()), szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight())
 				);
 			}
 		}
+		//Zeichen Standpunkt
+		g.setColor(Color.ORANGE);
+		g.fillOval(
+			map(szene.viewX, szene.xmin, szene.xmax, 0, getWidth()) - 5, 
+			map(szene.viewY, szene.ymin, szene.ymax, 0, getHeight()) - 5,
+			10, 10
+		);
 	}
 	
 	public void setSzene(Szene s)
