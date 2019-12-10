@@ -3,37 +3,37 @@ package eu.convos;
 public class Szene 
 {
 	Polygon[] polygone;
-	int xmin, xmax, ymin, ymax; //Wird benötigt um später die Szene Bildfüllend darzustellen
 	
-	int viewX, viewY;
+	//Wird benötigt um später die Szene Bildfüllend darzustellen
+	int xmin, xmax, ymin, ymax; 
 	
-	public Szene(Polygon[] polygone, int viewX, int viewY)
+	/** Position of the virtual spectator */
+	Point viewPoint; 
+	
+	public Szene(Polygon[] polygone, Point viewPoint)
 	{
-		xmin = xmax = viewX;
-		ymin = ymax = viewY;
+		this.viewPoint = viewPoint;
+		this.polygone = polygone;
+		
+		xmin = xmax = viewPoint.x;
+		ymin = ymax = viewPoint.y;
 		
 		for(Polygon p : polygone)
 		{
-			for(int x=0; x<p.anzahlKoordinaten(); x+= Polygon.DIMENSION)
+			for(int i=0; i<p.anzahlKoordinaten(); i++)
 			{
-				if(p.getKoordinate(x) < xmin)
-					xmin = p.getKoordinate(x);
-				if(p.getKoordinate(x) > xmax)
-					xmax = p.getKoordinate(x);
-			}
-			
-			for(int y=1; y<p.anzahlKoordinaten(); y+= Polygon.DIMENSION)
-			{
-				if(p.getKoordinate(y) < ymin)
-					ymin = p.getKoordinate(y);
-				if(p.getKoordinate(y) > ymax)
-					ymax = p.getKoordinate(y);
+				if(p.getKoordinate(i).x < xmin)
+					xmin = p.getKoordinate(i).x;
+				if(p.getKoordinate(i).x > xmax)
+					xmax = p.getKoordinate(i).x;
+				if(p.getKoordinate(i).y < ymin)
+					ymin = p.getKoordinate(i).y;
+				if(p.getKoordinate(i).y > ymax)
+					ymax = p.getKoordinate(i).y;
 			}
 		}
 		
-		this.polygone = polygone;
-		this.viewX = viewX;
-		this.viewY = viewY;
+		System.out.printf("xmin: %d, xmax: %d, ymin: %d, ymax %d %n", xmin, xmax, ymin, ymax);
 	}
 	
 	public Polygon[] getPolygone()

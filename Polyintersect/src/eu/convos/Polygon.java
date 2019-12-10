@@ -2,14 +2,22 @@ package eu.convos;
 
 public class Polygon 
 {
-	//Nicht ändern sonst wirds buggy
-	public static final int DIMENSION = 2;
+	private Point[] ecken;
 	
-	private int[] ecken;
+	public Polygon(Point[] ecken)
+	{
+		this.ecken = ecken;
+	}
 	
 	public Polygon(int[] ecken)
 	{
-		this.ecken = ecken;
+		if((ecken.length % 2) != 0)
+			throw new IllegalArgumentException("Uneven amount of coordinates for a 2D construct, got " + ecken.length + "!");
+		
+		this.ecken = new Point[ecken.length/2];
+		
+		for(int i=0; i<ecken.length; i+=Point.DIMENSION)
+			this.ecken[i/2] = new Point(ecken[i], ecken[i+1]);
 	}
 	
 	public int anzahlKoordinaten()
@@ -17,11 +25,31 @@ public class Polygon
 		return ecken.length;
 	}
 	
-	public int getKoordinate(int pos)
+	public Point getKoordinate(int pos)
 	{
 		if(pos < 0 || pos >= ecken.length)
-			throw new IllegalArgumentException("Die angegebene Koordinate an Index " + pos + " konnte nicht gefunden werden!");
+			throw new IllegalArgumentException("The given coordinate at index " + pos + " could not be found!");
 		
 		return ecken[pos];
+	}
+	
+	/**
+	 * Check if the line segment given by the two points intersect with the polygon.
+	 * @param begin The beginnign of the line segment.
+	 * @param end The end of the line segment.
+	 * @return True if the line intersects with one of the edges, false if not.
+	 */
+	public boolean intersects(Point begin, Point end)
+	{
+		for(int i=0; i<anzahlKoordinaten(); i++)
+		{
+			Point p2 = getKoordinate((i)   % anzahlKoordinaten());
+			Point q2 = getKoordinate((i+1) % anzahlKoordinaten());
+			
+			if(Mathe.intersectingSegments(begin, end, p2, q2))
+				return true;
+		}
+		
+		return false;
 	}
 }
