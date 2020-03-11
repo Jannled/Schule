@@ -1,10 +1,13 @@
 package eu.convos;
 
 import javax.swing.JPanel;
+
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.event.*;
 
 public class OutputPane extends JPanel
@@ -22,8 +25,16 @@ public class OutputPane extends JPanel
 	private Color COLOR_VIEW   = Color.DARK_GRAY;
 	private Color COLOR_VPUNKT = Color.ORANGE;
 	private Color COLOR_TARGET = Color.MAGENTA;
+	private Color COLOR_ROUTE  = Color.GREEN;
+	
+	private Stroke STROKE_DEFAULT = new BasicStroke(2);
+	private Stroke STROKE_PATH    = new BasicStroke(3,
+            BasicStroke.CAP_ROUND,
+            BasicStroke.JOIN_MITER,
+            10.0f, new float[] {5.0f}, 0.0f);
 	
 	Szene szene;
+	Route shRoute = null;
 	
 	public OutputPane()
 	{
@@ -54,12 +65,19 @@ public class OutputPane extends JPanel
 					szene.targetPoint.y = y;
 				}
 				
-				double minWeg = szene.minimalerWeg();
-				
-				System.out.printf("Kürzester Weg von A%s nach B%s: %.2f!%n", 
-						szene.viewPoint, szene.targetPoint, minWeg);
-				
-				Main.lblDistance.setText(String.format("Kürzester Weg: %.2f", minWeg));
+				shRoute = szene.minimalerWeg();
+				if(shRoute != null)
+				{
+					System.out.printf("Kürzester Weg von A%s nach B%s: %.2f!%n", 
+							szene.viewPoint, szene.targetPoint, shRoute.getDistance());
+					
+					Main.lblDistance.setText(String.format("Kürzester Weg: %.2f", shRoute.getDistance()));
+				}
+				else
+				{
+					System.out.printf("Keine Route von A%s nach B%s gefunden!%n", szene.viewPoint, szene.targetPoint);
+					Main.lblDistance.setText("Kein Weg vorhanden!");
+				}
 				
 				repaint();
 			}
@@ -79,8 +97,11 @@ public class OutputPane extends JPanel
 	}
 	
 	@Override
-	public void paintComponent(Graphics g) 
+	public void paintComponent(Graphics gr) 
 	{	
+		Graphics2D g = (Graphics2D) gr;
+		g.setStroke(STROKE_DEFAULT);
+		
 		g.setColor(BACKGROUND);
 		g.fillRect(0, 0, getWidth(), getHeight());
 		
@@ -89,7 +110,7 @@ public class OutputPane extends JPanel
 			return;
 		
 		//Antialiasing ON
-        ((Graphics2D) g).setRenderingHint(
+       g.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING, 
                 RenderingHints.VALUE_ANTIALIAS_ON);
 		
@@ -133,13 +154,27 @@ public class OutputPane extends JPanel
 		);
 		
 		//Zeichne Zielpunkt
-				g.setColor(COLOR_TARGET);
-				g.drawOval(
-					Mathe.map(szene.targetPoint.x, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()) - VPUNKT_SIZE/2,
-					Mathe.map(szene.targetPoint.y, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()) - VPUNKT_SIZE/2,
-					VPUNKT_SIZE, 
-					VPUNKT_SIZE
-				);
+		g.setColor(COLOR_TARGET);
+		g.drawOval(
+			Mathe.map(szene.targetPoint.x, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()) - VPUNKT_SIZE/2,
+			Mathe.map(szene.targetPoint.y, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()) - VPUNKT_SIZE/2,
+			VPUNKT_SIZE, 
+			VPUNKT_SIZE
+		);
+				
+		//Zeiche kürzesten Weg
+		g.setStroke(STROKE_PATH);
+		g.setColor(COLOR_ROUTE);
+		Point last = null;
+		if(shRoute != null)
+		{
+			for(Point p : shRoute)
+			{
+				if(last != null)
+					drawLine(p.x, p.y, last.x, last.y, g);
+				last = p;
+			}
+		}
 	}
 	
 	/**

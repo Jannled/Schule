@@ -43,8 +43,12 @@ public class Szene
 		System.out.printf("xmin: %d, xmax: %d, ymin: %d, ymax %d %n", xmin, xmax, ymin, ymax);
 	}
 	
-	public double minimalerWeg()
+	public Route minimalerWeg()
 	{
+		Route shortestPath = new Route();
+		
+		shortestPath.add(viewPoint);
+		
 		//Sammle die Polygone, die sich auf direktem Wege zum Ziel befinden
 		LinkedList<Polygon> imweg = new LinkedList<Polygon>();
 		
@@ -55,11 +59,19 @@ public class Szene
 		}
 		
 		//1. Einfachster Fall: Keine Objekte im Weg
-		if(imweg.size() < 1)
-			return viewPoint.abstand(targetPoint);
 		
-		//Error
-		return -1;
+		//2. Ein Objekt ist im Weg
+		if(imweg.size() > 0)
+		{
+			
+		}
+		
+		else return null;
+		
+		shortestPath.add(targetPoint);
+		
+		//Return result or error
+		return shortestPath;
 	}
 	
 	public Polygon[] getPolygone()
