@@ -3,6 +3,8 @@ package eu.convos;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.*;
 
 public class OutputPane extends JPanel
@@ -19,6 +21,7 @@ public class OutputPane extends JPanel
 	private Color COLOR_LINE   = Color.WHITE;
 	private Color COLOR_VIEW   = Color.DARK_GRAY;
 	private Color COLOR_VPUNKT = Color.ORANGE;
+	private Color COLOR_TARGET = Color.MAGENTA;
 	
 	Szene szene;
 	
@@ -30,13 +33,33 @@ public class OutputPane extends JPanel
 			@Override
 			public void mouseClicked(MouseEvent e) 
 			{
-				int x = map(e.getX(), 0, getWidth(), szene.xmin - SPACING, szene.xmax + SPACING);
-				int y = map(e.getY(), 0, getHeight(), szene.ymin - SPACING, szene.ymax + SPACING);
+				if(e.getButton() == MouseEvent.BUTTON1)
+				{
+					int x = Mathe.map(e.getX(), 0, getWidth(), szene.xmin - SPACING, szene.xmax + SPACING);
+					int y = Mathe.map(e.getY(), 0, getHeight(), szene.ymin - SPACING, szene.ymax + SPACING);
+					
+					System.out.println("Viewpoint: " + x + "x" + y);
+					
+					szene.viewPoint.x = x;
+					szene.viewPoint.y = y;
+				}
+				else if(e.getButton() == MouseEvent.BUTTON3)
+				{
+					int x = Mathe.map(e.getX(), 0, getWidth(), szene.xmin - SPACING, szene.xmax + SPACING);
+					int y = Mathe.map(e.getY(), 0, getHeight(), szene.ymin - SPACING, szene.ymax + SPACING);
+					
+					System.out.println("Target point: " + x + "x" + y);
+					
+					szene.targetPoint.x = x;
+					szene.targetPoint.y = y;
+				}
 				
-				System.out.println("Viewpoint: " + x + "x" + y);
+				double minWeg = szene.minimalerWeg();
 				
-				szene.viewPoint.x = x;
-				szene.viewPoint.y = y;
+				System.out.printf("Kürzester Weg von A%s nach B%s: %.2f!%n", 
+						szene.viewPoint, szene.targetPoint, minWeg);
+				
+				Main.lblDistance.setText(String.format("Kürzester Weg: %.2f", minWeg));
 				
 				repaint();
 			}
@@ -64,6 +87,11 @@ public class OutputPane extends JPanel
 		//Prüfe ob die Szene schon gesetzt wurde
 		if(szene == null)
 			return;
+		
+		//Antialiasing ON
+        ((Graphics2D) g).setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//Draw Polygon Lines
 		g.setColor(COLOR_LINE);
@@ -98,11 +126,20 @@ public class OutputPane extends JPanel
 		//Zeichen Standpunkt
 		g.setColor(COLOR_VPUNKT);
 		g.drawOval(
-			map(szene.viewPoint.x, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()) - VPUNKT_SIZE/2,
-			map(szene.viewPoint.y, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()) - VPUNKT_SIZE/2,
+			Mathe.map(szene.viewPoint.x, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()) - VPUNKT_SIZE/2,
+			Mathe.map(szene.viewPoint.y, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()) - VPUNKT_SIZE/2,
 			VPUNKT_SIZE, 
 			VPUNKT_SIZE
 		);
+		
+		//Zeichne Zielpunkt
+				g.setColor(COLOR_TARGET);
+				g.drawOval(
+					Mathe.map(szene.targetPoint.x, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()) - VPUNKT_SIZE/2,
+					Mathe.map(szene.targetPoint.y, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()) - VPUNKT_SIZE/2,
+					VPUNKT_SIZE, 
+					VPUNKT_SIZE
+				);
 	}
 	
 	/**
@@ -111,24 +148,23 @@ public class OutputPane extends JPanel
 	 * @param ystart Y coordinate of the line beginning.
 	 * @param xend X coordinate of the line ending.
 	 * @param yend Y coordinate of the line beginning.
+	 * @param g
 	 */
 	public void drawLine(int xstart, int ystart, int xend, int yend, Graphics g)
 	{
 		g.drawLine(
-			map(xstart, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
-			map(ystart, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()),
-			map(xend, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
-			map(yend, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight())
+			Mathe.map(xstart, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
+			Mathe.map(ystart, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight()),
+			Mathe.map(xend, szene.xmin - SPACING, szene.xmax + SPACING, 0, getWidth()),
+			Mathe.map(yend, szene.ymin - SPACING, szene.ymax + SPACING, 0, getHeight())
 		);
 	}
 	
 	/**
 	 * Check if the line intersects one of the lines in the polygon
-	 * @param xstart
-	 * @param ystart
-	 * @param xend
-	 * @param yend
-	 * @param p
+	 * @param begin
+	 * @param end
+	 * @param polys
 	 * @return
 	 */
 	public boolean intersectingPolygons(Point begin, Point end, Polygon[] polys)
@@ -147,19 +183,5 @@ public class OutputPane extends JPanel
 	{
 		this.szene = s;
 		repaint();
-	}
-	
-	/**
-	 * Source: https://www.arduino.cc/reference/en/language/functions/math/map/
-	 * @param x The number to map.
-	 * @param in_min The lower bound of the value’s current range.
-	 * @param in_max The upper bound of the value’s current range
-	 * @param out_min The lower bound of the value’s target range.
-	 * @param out_max The upper bound of the value’s target range.
-	 * @return
-	 */
-	int map(int x, int in_min, int in_max, int out_min, int out_max) 
-	{
-		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 }

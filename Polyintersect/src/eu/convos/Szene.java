@@ -1,5 +1,7 @@
 package eu.convos;
 
+import java.util.LinkedList;
+
 public class Szene 
 {
 	Polygon[] polygone;
@@ -10,10 +12,15 @@ public class Szene
 	/** Position of the virtual spectator */
 	Point viewPoint; 
 	
+	/** Position of the target */
+	Point targetPoint;
+	
 	public Szene(Polygon[] polygone, Point viewPoint)
 	{
 		this.viewPoint = viewPoint;
 		this.polygone = polygone;
+		
+		this.targetPoint = new Point(0, 0);
 		
 		xmin = xmax = viewPoint.x;
 		ymin = ymax = viewPoint.y;
@@ -34,6 +41,25 @@ public class Szene
 		}
 		
 		System.out.printf("xmin: %d, xmax: %d, ymin: %d, ymax %d %n", xmin, xmax, ymin, ymax);
+	}
+	
+	public double minimalerWeg()
+	{
+		//Sammle die Polygone, die sich auf direktem Wege zum Ziel befinden
+		LinkedList<Polygon> imweg = new LinkedList<Polygon>();
+		
+		for(Polygon p : getPolygone())
+		{
+			if(p.intersects(viewPoint, targetPoint))
+				imweg.add(p);
+		}
+		
+		//1. Einfachster Fall: Keine Objekte im Weg
+		if(imweg.size() < 1)
+			return viewPoint.abstand(targetPoint);
+		
+		//Error
+		return -1;
 	}
 	
 	public Polygon[] getPolygone()

@@ -16,7 +16,7 @@ public class Mathe
 	 * @param y4 y-Coord of line 2 end
 	 * @return True if the two lines intersect, false if not
 	 */
-	public boolean intersectingLines(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
+	public static boolean intersectingLines(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
 	{
 		// x = ((x1*y1 - x1*y2) * (x4-x3) - (x4*y3 - x3*y4) * (x2-x1)) / ((x2-x1) *
 		// (y4-y3) - (x4-x3) * (y2-y1))
@@ -114,5 +114,19 @@ public class Mathe
 			return true;
 
 		return false; // Doesn't fall in any of the above cases
+	}
+	
+	/**
+	 * Source: https://www.arduino.cc/reference/en/language/functions/math/map/
+	 * @param x The number to map.
+	 * @param in_min The lower bound of the value’s current range.
+	 * @param in_max The upper bound of the value’s current range
+	 * @param out_min The lower bound of the value’s target range.
+	 * @param out_max The upper bound of the value’s target range.
+	 * @return
+	 */
+	public static int map(int x, int in_min, int in_max, int out_min, int out_max) 
+	{
+		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
 }
