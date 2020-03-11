@@ -6,7 +6,7 @@ public class Szene
 {
 	Polygon[] polygone;
 	
-	//Wird benötigt um später die Szene Bildfüllend darzustellen
+	//Wird benï¿½tigt um spï¿½ter die Szene Bildfï¿½llend darzustellen
 	int xmin, xmax, ymin, ymax; 
 	
 	/** Position of the virtual spectator */
@@ -48,22 +48,57 @@ public class Szene
 		Route shortestPath = new Route();
 		
 		shortestPath.add(viewPoint);
-		
-		//Sammle die Polygone, die sich auf direktem Wege zum Ziel befinden
+	
 		LinkedList<Polygon> imweg = new LinkedList<Polygon>();
 		
-		for(Polygon p : getPolygone())
-		{
-			if(p.intersects(viewPoint, targetPoint))
-				imweg.add(p);
-		}
+		
 		
 		//1. Einfachster Fall: Keine Objekte im Weg
-		
-		//2. Ein Objekt ist im Weg
-		if(imweg.size() > 0)
+		if(imweg.size() == 0)
 		{
 			
+		}
+		
+		while(imweg.size() > 0)
+		{
+			//Look for polygons, that are intersecting with the shortest way to the target 
+			for(Polygon p : getPolygone())
+			{
+				if(p.intersects(viewPoint, targetPoint))
+					imweg.add(p);
+			}
+			
+			//Find a way to bypass these
+		}
+		
+		//2. Ein Objekt ist im Weg
+		else if(imweg.size() > 0)
+		{
+			Point entrance = viewPoint;
+			Point exit = targetPoint;
+
+			Point x = null;
+			double distance = Double.MAX_VALUE;
+			
+			//For every Polygon
+			for(Polygon p : imweg)
+			{	
+				//Find Coordinate with minimal distance to exit, but is in sight of Entrance
+				for(int i=0; i<p.anzahlKoordinaten(); i++)
+				{
+					if(!intersects(p.getKoordinate(i), entrance))
+					{
+						double dist = p.getKoordinate(i).abstand(exit);
+						if(dist < distance)
+						{
+							x = p.getKoordinate(i);
+							distance = dist;
+						}
+					}
+				}
+			}
+			if(x != null)
+				shortestPath.add(x);
 		}
 		
 		else return null;
@@ -72,6 +107,16 @@ public class Szene
 		
 		//Return result or error
 		return shortestPath;
+	}
+	
+	public boolean intersects(Point a, Point b)
+	{
+		for(Polygon p : polygone)
+		{
+			if(p.intersects(a, b))
+				return true;
+		}
+		return false;
 	}
 	
 	public Polygon[] getPolygone()

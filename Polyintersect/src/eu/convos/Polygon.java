@@ -1,8 +1,11 @@
 package eu.convos;
 
-public class Polygon 
+import java.util.Arrays;
+import java.util.Iterator;
+
+public class Polygon implements Iterable<Point> 
 {
-	private Point[] ecken;
+	Point[] ecken;
 	
 	public Polygon(Point[] ecken)
 	{
@@ -51,5 +54,10 @@ public class Polygon
 		}
 		
 		return false;
+	}
+
+	@Override
+	public Iterator<Point> iterator() {
+		return Arrays.stream(ecken).iterator();
 	}
 }

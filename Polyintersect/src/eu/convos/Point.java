@@ -16,6 +16,9 @@ public class Point
 	
 	public double abstand(Point p)
 	{
+		if(p == null)
+			return Double.NaN;
+		
 		int a = x - p.x;
 		int b = y - p.y;
 		

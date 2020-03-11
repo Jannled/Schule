@@ -1,0 +1,3 @@
+Für jedes Polygon tue:
+    Gehe vom Startpunkt zum nächsten Punkt des Polygons
+    Gehe Links und Rechtsrum um das Polygon herum, bis dass der Startpunkt vom aktuellen Punkt nicht mehr sichtbar ist
