@@ -46,36 +46,28 @@ public class Szene
 	public Route minimalerWeg()
 	{
 		Route shortestPath = new Route();
-		
 		shortestPath.add(viewPoint);
 	
 		LinkedList<Polygon> imweg = new LinkedList<Polygon>();
 		
+		Point entrance = viewPoint;
+		Point exit = targetPoint;
 		
-		
-		//1. Einfachster Fall: Keine Objekte im Weg
-		if(imweg.size() == 0)
-		{
+		do {
+			imweg.clear();
 			
-		}
-		
-		while(imweg.size() > 0)
-		{
 			//Look for polygons, that are intersecting with the shortest way to the target 
 			for(Polygon p : getPolygone())
 			{
-				if(p.intersects(viewPoint, targetPoint))
+				if(p.intersects(entrance, exit))
 					imweg.add(p);
 			}
 			
-			//Find a way to bypass these
-		}
-		
-		//2. Ein Objekt ist im Weg
-		else if(imweg.size() > 0)
-		{
-			Point entrance = viewPoint;
-			Point exit = targetPoint;
+			//1. Easy case: No Polygons are in the way, shortest path is the direct one
+			if(imweg.size() < 1)
+				break;
+			
+			//2. Hard case: Find a way to bypass these
 
 			Point x = null;
 			double distance = Double.MAX_VALUE;
@@ -99,13 +91,10 @@ public class Szene
 			}
 			if(x != null)
 				shortestPath.add(x);
-		}
-		
-		else return null;
+		} while(imweg.size() > 0);
 		
 		shortestPath.add(targetPoint);
 		
-		//Return result or error
 		return shortestPath;
 	}
 	
