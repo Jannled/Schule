@@ -10,10 +10,12 @@ import java.util.Iterator;
 public class AsozialesNetz implements Iterable<Person>
 {
 	ArrayList<Person> nutzer;
+	ArrayList<Gruppe> gruppen;
 	
 	public AsozialesNetz(File f)
 	{
 		nutzer = new ArrayList<Person>();
+		gruppen = new ArrayList<Gruppe>();
 		
 		try(BufferedReader br = new BufferedReader(new FileReader(f)))
 		{
@@ -23,29 +25,28 @@ public class AsozialesNetz implements Iterable<Person>
 			{
 				//Teile Zeile in Wörter
 				String[] woerter = line.split(" ");
+				
+				//Die Zeile ist ungültig
 				if(woerter.length < 1)
 				{
 					System.err.println("Invalid line!");
 					continue;
 				}
 				
-				//Erstes Wort in der Zeile ist die zu bearbeitende Person
-				Person person = getPerson(woerter[0]);
-				
-				//Wenn es die Person noch nicht gibt, füge sie hinzu
-				if(person == null)
-					person = addPerson(new Person(woerter[0]));
-				
-				//Bearbeite alle Follower in der Zeile
-				for(int i=1; i<woerter.length; i++)
+				//Die Zeile enthält eine Gruppe
+				else if(woerter.length > 2)
 				{
-					Person folgt = getPerson(woerter[i]);
+					Gruppe g = new Gruppe();
+					gruppen.add(g);
 					
-					//Wenn es die Person noch nicht gibt, der gefolgt werden soll, füge diese hinzu.
-					if(folgt == null)
-						folgt = addPerson(new Person(woerter[i]));
+					for(String s : woerter)
+						g.addMitglied(getPerson(s));
+				}
 					
-					person.folgePerson(folgt);
+				//Die Zeile enthält eine Person mit der zu folgenden Person
+				else
+				{
+					getPerson(woerter[0]).folgePerson(getPerson(woerter[1]));
 				}
 			}
 		} 
@@ -55,15 +56,13 @@ public class AsozialesNetz implements Iterable<Person>
 		}
 	}
 	
-	public Person addPerson(Person p)
+	public void addPerson(Person p)
 	{
-		if(nutzer.add(p))
-			return p;
-		else
-			return null;
+		nutzer.add(p);
 	}
 	
-	public Person getPerson(String name)
+	//Gibt die Person mit angegebenen Namen zurück oder null, wenn die Person nicht gefunden wurde
+	public Person findPerson(String name)
 	{
 		for(Person p : nutzer)
 		{
@@ -72,6 +71,19 @@ public class AsozialesNetz implements Iterable<Person>
 		}
 					
 		return null;
+	}
+	
+	//Gibt die Person mit angegebenen Namen zurück oder erstellt diese, wenn noch nicht vorhanden
+	public Person getPerson(String name)
+	{
+		Person p = findPerson(name);
+		if(p == null)
+		{
+			p = new Person(name);
+			addPerson(p);
+			return p;
+		}
+		else return p;
 	}
 	
 	// Folgt die Person A Person B
@@ -87,6 +99,18 @@ public class AsozialesNetz implements Iterable<Person>
 		}
 		
 		return false;
+	}
+	
+	public Gruppe getGruppe()
+	{
+		if(gruppen.size() > 0)
+			return getGruppe(0);
+		return null;
+	}
+	
+	public Gruppe getGruppe(int index)
+	{
+		return gruppen.get(index);
 	}
 
 	@Override
