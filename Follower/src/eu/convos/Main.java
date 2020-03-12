@@ -10,13 +10,19 @@ public class Main
 {
 	public static final int PING = 300; // Aufgabenstellung besagt 3000ms = 3 Sekunden
 	
+	static int anfragen = 0;
+	
 	public static void main(String[] args) 
 	{
-		File f = new File("src/Follower3.txt");
+		//Wähle Datei von der Kommandozeile aus, oder wähle das Beispiel
+		File f = new File(args.length>1 ? args[0] : "src/Follower3.txt");
 		System.out.println(f.getAbsolutePath());
+		System.out.println();
 		
 		AsozialesNetz zwitscher = new AsozialesNetz(f);
 		findeStar(zwitscher.getGruppe(), zwitscher);
+		
+		System.out.printf("Habe %d Anfragen in %.2f Sekunden gestellt.%n", anfragen, (float) (anfragen*PING)/1000);
 	}
 	
 	public static Person findeStar(Gruppe gruppe, AsozialesNetz asn)
@@ -66,6 +72,8 @@ public class Main
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		anfragen++;
 		
 		boolean antwort = asn.folgt(a, b);
 		System.out.println(antwort ? "JA!" : "NEIN!");
