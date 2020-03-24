@@ -1,5 +1,6 @@
 package eu.convos;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -23,6 +24,12 @@ public class Route implements Iterable<Point>
 	public void add(Point p)
 	{
 		path.add(p);
+		length = calculateLength();
+	}
+	
+	public void addAll(Collection<? extends Point> p)
+	{
+		path.addAll(p);
 		length = calculateLength();
 	}
 	

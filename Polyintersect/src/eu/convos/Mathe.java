@@ -129,4 +129,26 @@ public class Mathe
 	{
 		return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 	}
+	
+	/**
+	 * Calculates the modulo (n % m), NOT the remainder!
+	 * @param n
+	 * @param m
+	 * @return
+	 */
+	public static int mod(int n, int m)
+	{
+		return ((n % m) + m) % m;
+	}
+	
+	/**
+	 * Calculates the modulo (n % m), NOT the remainder!
+	 * @param n
+	 * @param m
+	 * @return
+	 */
+	public static double mod(double n, double m)
+	{
+		return ((n % m) + m) % m;
+	}
 }

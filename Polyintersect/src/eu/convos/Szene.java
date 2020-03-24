@@ -68,29 +68,73 @@ public class Szene
 				break;
 			
 			//2. Hard case: Find a way to bypass these
-
-			Point x = null;
-			double distance = Double.MAX_VALUE;
-			
-			//For every Polygon
+			//Select closest Polygon blocking the way
+			Polygon closest = imweg.getFirst();
+			Point closestPoint = closest.getKoordinate(0);
+			double closestDistance = closestPoint.abstand(entrance);
 			for(Polygon p : imweg)
-			{	
-				//Find Coordinate with minimal distance to exit, but is in sight of Entrance
-				for(int i=0; i<p.anzahlKoordinaten(); i++)
+			{
+				for(Point point : p.ecken)
 				{
-					if(!intersects(p.getKoordinate(i), entrance))
+					if(point.abstand(entrance) < closestDistance)
 					{
-						double dist = p.getKoordinate(i).abstand(exit);
-						if(dist < distance)
-						{
-							x = p.getKoordinate(i);
-							distance = dist;
-						}
+						closest = p;
+						closestPoint = point;
+						closestDistance = point.abstand(entrance);
 					}
 				}
 			}
+			
+			//Select closest vertice to target
+			Point x = closestPoint;
+			double closestX = x.abstand(exit);
+			for(Point p : closest.ecken)
+			{
+				if(p.abstand(exit) < closestX)
+				{
+					x = p;
+					closestX = x.abstand(exit);
+				}
+			}
+				
+			//Pick shortest way around current polygon
+			float aLength = 0, bLength = 0;
+			LinkedList<Point> aPath = new LinkedList<Point>();
+			LinkedList<Point> bPath = new LinkedList<Point>();
+			int index = 0;
+			for(Point p : closest)
+			{
+				if(p == closestPoint) break;
+				index++;
+			}
+			
+			for(int i=index, j=0; j<closest.anzahlKoordinaten(); i++, j++)
+			{
+				if(closest.getKoordinate(Mathe.mod(i, closest.anzahlKoordinaten())) == x) break;
+				aPath.add(closest.getKoordinate(Mathe.mod(i, closest.anzahlKoordinaten())));
+				aLength += closest.getKoordinate(Mathe.mod(i, closest.anzahlKoordinaten()))
+						.abstand(closest.getKoordinate(Mathe.mod(i+1, closest.anzahlKoordinaten())));
+			}
+			
+			for(int i=index, j=0; j<closest.anzahlKoordinaten(); i--, j++)
+			{
+				if(closest.getKoordinate(Mathe.mod(i, closest.anzahlKoordinaten())) == x) break;
+				bPath.add(closest.getKoordinate(Mathe.mod(i, closest.anzahlKoordinaten())));
+				bLength += closest.getKoordinate(Mathe.mod(i, closest.anzahlKoordinaten()))
+						.abstand(closest.getKoordinate(Mathe.mod(i+1, closest.anzahlKoordinaten())));
+			}
+			
+			if(aLength < bLength)
+				shortestPath.addAll(aPath);
+			else
+				shortestPath.addAll(bPath);
+			
+			//Append x to the path
 			if(x != null)
 				shortestPath.add(x);
+			
+			//New entrance will be the vertice with shortest distance to target of current polygon
+			entrance = x;
 		} while(imweg.size() > 0);
 		
 		shortestPath.add(targetPoint);
